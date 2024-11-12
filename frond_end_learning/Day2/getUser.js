@@ -20,6 +20,7 @@ function getUser(){
             else{
                 reject('User not found');
             }
+            
         }, 5000);
     });
 }
@@ -37,13 +38,5 @@ function getUserById(id) {
     });
 }
 
-function fetchData() {
-    getUser()
-        .then(users => console.log(users))
-        .catch(error => console.error(error));
-    getUserById(1)
-        .then(user => console.log(user))
-        .catch(error => console.error(error));
-}
 
 fetchData();
