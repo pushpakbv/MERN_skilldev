@@ -16,11 +16,25 @@ exports.getItemById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// app.post('/upload',upload.single("profileImage"),(req,res)=>{
+//     console.log(req.body); //no text field -> Null
+//     console.log(req.file);
+
+//     return res.redirect("/");
+// })
+
+
 exports.createItem = async (req, res) => {
     try {
-        const product = new Product(req.body);
-        const savedItem = await product.save();
-        res.status(201).json(savedItem);
+
+        console.log(req.body); //no text field -> Null
+        console.log(req.file);
+        return res.redirect("/");
+
+        // const product = new Product(req.body);
+        // const savedItem = await product.save();
+        // res.status(201).json(savedItem);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
