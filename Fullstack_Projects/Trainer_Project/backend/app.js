@@ -6,27 +6,8 @@ const PORT = process.env.PORT || 8000;
 const trainerRoute = require('./routes/trainer');
 const cors = require('cors');
 
- //by default all origins
-
-//single origin
-// app.use(cors());
-// const corsOptions = {
-// 	origin: 'http://localhost:3000', // Only allow requests from this URL
-// };
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.use('/api/trainer', trainerRoute);
-
-
-
-
-
-//allow multiple origins
-
-const allowedOrigins = ['http://localhost:3000', 'http://example.com'];
-
+// Allow multiple origins
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
 const corsOptions = {
 	origin: (origin, callback) => {
 		if (allowedOrigins.includes(origin) || !origin) {
@@ -35,17 +16,22 @@ const corsOptions = {
 			callback(new Error('Not allowed by CORS'));
 		}
 	}
-
 };
+
+// Apply CORS middleware before any routes
 app.use(cors(corsOptions));
 
+// Middleware to parse JSON and URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
+// Define routes
+app.use('/api/trainers', trainerRoute);
 
-
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL)
-.then((e)=> console.log("MongoDB Connected"))
-.catch((e)=> console.log(e))
+	.then(() => console.log("MongoDB Connected"))
+	.catch((e) => console.log("MongoDB connection error:", e));
 
-app.listen(PORT , ()=>console.log(`Server started at PORT:${PORT}`));
-
-
+// Start the server
+app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
