@@ -4,12 +4,12 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 8000;
 const trainerRoute = require('./routes/trainer');
-
 const cors = require('cors');
 
-app.use(cors()); //by default all origins
+ //by default all origins
 
-
+//single origin
+// app.use(cors());
 // const corsOptions = {
 // 	origin: 'http://localhost:3000', // Only allow requests from this URL
 // };
@@ -24,6 +24,7 @@ app.use('/api/trainer', trainerRoute);
 
 
 //allow multiple origins
+
 const allowedOrigins = ['http://localhost:3000', 'http://example.com'];
 
 const corsOptions = {
@@ -34,7 +35,9 @@ const corsOptions = {
 			callback(new Error('Not allowed by CORS'));
 		}
 	}
+
 };
+app.use(cors(corsOptions));
 
 
 
@@ -43,6 +46,6 @@ mongoose.connect(process.env.MONGO_URL)
 .then((e)=> console.log("MongoDB Connected"))
 .catch((e)=> console.log(e))
 
-/app.listen(PORT , ()=>console.log(`Server started at PORT:${PORT}`));
+app.listen(PORT , ()=>console.log(`Server started at PORT:${PORT}`));
 
 
