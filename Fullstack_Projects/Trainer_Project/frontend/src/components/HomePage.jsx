@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import AddTrainer from './AddTrainer';
 import GetTrainer from './GetTrainer';
+import EditTrainer from './EditTrainer';
 
 function HomePage() {
   const [trainers, setTrainers] = useState([]);
@@ -24,6 +25,11 @@ function HomePage() {
     setTrainers([...trainers, newTrainer]);
   };
 
+  const handleUpdateTrainer = async (updatedTrainer) => {
+    const updatedTrainers = trainers.map((trainer) => trainer._id === updatedTrainer._id ? updatedTrainer:trainer);
+    setTrainers(updatedTrainers);
+  };
+
   const handleDeleteTrainer = async (trainerId) => {
     try {
       await axios.delete(`http://localhost:3000/api/trainers/${trainerId}`);
@@ -34,23 +40,23 @@ function HomePage() {
   };
 
   return (
-    // <Router>
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold text-center mb-6">Trainer Management</h1>
+    <Router>
+      <div className="max-w-4xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-center mb-6">Trainer Management</h1>
+        <nav className="flex justify-center space-x-4 mb-6">
+          <Link to="/" className="text-blue-500 hover:underline">Trainer List</Link>
+          <span>|</span>
+          <Link to="/add-trainer" className="text-blue-500 hover:underline">Add Trainer</Link>
+        </nav>
 
-      <nav className="flex justify-center space-x-4 mb-6">
-        <Link to="/" className="text-blue-500 hover:underline">Trainer List</Link>
-        <span>|</span>
-        <Link to="/add-trainer" className="text-blue-500 hover:underline">Add Trainer</Link> {/* Update path if needed */}
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<GetTrainer trainers={trainers} onDeleteTrainer={handleDeleteTrainer} />} />
-        <Route path="/add-trainer" element={<AddTrainer onAddTrainer={handleAddTrainer} />} />
-        {/* Add more routes if needed */}
-      </Routes>
-    </div>
-    // </Router>
+        <Routes>
+          <Route path="/" element={<GetTrainer trainers={trainers} onDeleteTrainer={handleDeleteTrainer} />} />
+          <Route path="/add-trainer" element={<AddTrainer onAddTrainer={handleAddTrainer} />} />
+          {/* Add more routes if needed */}
+          <Route path="/edit-trainer/:id" element={<EditTrainer trainers={trainers} onUpdateTrainer={handleUpdateTrainer} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
